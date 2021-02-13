@@ -21,3 +21,12 @@ Features of the application that users can access includes:
 - Calculate the profit/loss of the portfolio, or a certain stock
 - Edits to their portfolio
 
+#### User's Stories:
+
+- As a user, I want to be able to add a stock to my portfolio
+- As a user, I want to be able to delete a stock from my portfolio
+- As a user, I want to be able to view the stocks in my portfolio
+- As a user, I want to be able to see the profit/loss each stock in my portfolio is at
+- As a user, I want to be able to see the total profit/loss I am at in my portfolio
+- As a user, I want to be able to change the currency I view the money in
+- As a user, I want to be able to edit each stock in my portfolio manually
