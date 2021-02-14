@@ -10,7 +10,7 @@ hedge fund managers, etc.
  
 This project is of interest to me because I have many stocks
 in different online brokerage accounts. It has been
-a hassel to go to each site and to check what I have. Furthermore,
+a hassle to go to each site and to check what I have. Furthermore,
 it is tedious to calculate the profit/loss I 
 currently have especially when they are in different
 currencies.
@@ -28,5 +28,4 @@ Features of the application that users can access includes:
 - As a user, I want to be able to view the stocks in my portfolio
 - As a user, I want to be able to see the profit/loss each stock in my portfolio is at
 - As a user, I want to be able to see the total profit/loss I am at in my portfolio
-- As a user, I want to be able to change the currency I view the money in
 - As a user, I want to be able to edit each stock in my portfolio manually
