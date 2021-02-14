@@ -23,7 +23,7 @@ Features of the application that users can access includes:
 
 #### User's Stories:
 
-- As a user, I want to be able to add a stock to my portfolio
+- As a user, I want to be able to add a stock to my portfolio (add multiple X's to a Y)
 - As a user, I want to be able to delete a stock from my portfolio
 - As a user, I want to be able to view the stocks in my portfolio
 - As a user, I want to be able to see the profit/loss each stock in my portfolio is at
