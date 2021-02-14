@@ -149,6 +149,7 @@ public class PortfolioApp {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: displays commands and allows for the input to be processed
     private void doStockCommand(Stock stock) {
         System.out.println("\nWhat would you like to edit?");
@@ -195,8 +196,13 @@ public class PortfolioApp {
     private void doAddVolume(Stock stock) {
         System.out.println("How much volume would you like to add to the stock?");
         double volume = tryDouble();
-        stock.addVolume(volume);
-        System.out.println("Done...");
+        if (volume < 0) {
+            System.out.println("Sorry, your input is invalid. The number is negative. Try again please.");
+            doStockCommand(stock);
+        } else {
+            stock.addVolume(volume);
+            System.out.println("Done...");
+        }
     }
 
     // MODIFIES: this
@@ -205,14 +211,14 @@ public class PortfolioApp {
         System.out.println("How much volume would you like to subtract from the stock?");
         double volume = tryDouble();
         if (volume > stock.getVolume()) {
-            System.out.println("Sorry, you're input is invalid. The number is too great.");
+            System.out.println("Sorry, your input is invalid. The number is too great. Try again please.");
+            doStockCommand(stock);
         } else {
             stock.subtractVolume(volume);
             System.out.println("Done...");
         }
     }
 
-    // MODIFIES: this
     // EFFECTS: prints stock to the screen
     private void doPrintStock(Stock stock) {
         System.out.println(stock);
