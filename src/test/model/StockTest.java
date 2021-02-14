@@ -38,13 +38,13 @@ public class StockTest {
 
     @Test
     public void testToString() {
-     assertEquals("[ETH: +$0.00]", stock.toString());
+     assertEquals("[ETH: +$0.00, " + stock.getVolume() + "]", stock.toString());
      stock.setCurrentPriceCAD(2400);
      assertEquals(11.42 * (2400 - 2325.61), stock.getProfit());
-     assertEquals("[ETH: +$849.53]", stock.toString());
+     assertEquals("[ETH: +$849.53, " + stock.getVolume() + "]", stock.toString());
      stock.setCurrentPriceCAD(2200);
      assertEquals(11.42 * (2200 - 2325.61), stock.getProfit());
-     assertEquals("[ETH: -$1434.47]", stock.toString());
+     assertEquals("[ETH: -$1434.47, " + stock.getVolume() + "]", stock.toString());
     }
 
     @Test

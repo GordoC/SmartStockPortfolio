@@ -1,5 +1,7 @@
 package model;
 
+// Represents a stock having a name, volume, initial price in CAD, current price in CAD,
+// and current profit generated
 public class Stock {
     private String name;
     private double volume;
@@ -68,10 +70,12 @@ public class Stock {
     @Override
     public String toString() {
         String profitStr = String.format("%.2f", getProfit()); // get profit to 2 decimal places as a string
+        String volumeStr = String.format("%.2f", volume); // get volume to 2 decimal places as a string
         if (profit >= 0) {
-            return "[" + name + ": +$" + profitStr + "]";
+            return "[" + name + ": +$" + profitStr + ", " + volumeStr + "]";
         } else {
-            return "[" + name + ": -$" + profitStr.substring(1) + "]"; // properly formats if profit is negative
+            // properly formats if profit is negative
+            return "[" + name + ": -$" + profitStr.substring(1) + ", " + volumeStr + "]";
         }
     }
 }

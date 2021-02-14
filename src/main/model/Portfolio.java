@@ -2,6 +2,7 @@ package model;
 
 import java.util.LinkedList;
 
+// Represents a portfolio that can hold multiple stocks
 public class Portfolio {
     private LinkedList<Stock> portfolio;
 
