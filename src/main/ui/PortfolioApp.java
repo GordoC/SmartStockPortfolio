@@ -14,9 +14,9 @@ public class PortfolioApp {
         runPortfolio();
     }
 
-    // Source: TellerApp
     // MODIFIES: this
     // EFFECTS: processes user input
+    // Source: TellerApp
     private void runPortfolio() {
         boolean keepGoing = true;
         String command = null;
@@ -38,9 +38,9 @@ public class PortfolioApp {
         System.out.println("\nGoodbye!");
     }
 
-    // Source: TellerApp
     // MODIFIES: this
     // EFFECTS: processes user command
+    // Source: TellerApp
     private void processCommand(String command) {
         if (command.equals("a")) {
             doAddStock();
@@ -57,8 +57,8 @@ public class PortfolioApp {
         }
     }
 
-    // Source: TellerApp
     // EFFECTS: displays menu of options to user
+    // Source: TellerApp
     private void displayMenu() {
         System.out.println("\nSelect from:");
         System.out.println("\ta -> Add a stock");
@@ -69,9 +69,9 @@ public class PortfolioApp {
         System.out.println("\tq -> To quit");
     }
 
-    // Source: TellerApp
     // MODIFIES: this
     // EFFECTS: initializes portfolio
+    // Source: TellerApp
     private void init() {
         portfolio = new Portfolio();
         input = new Scanner(System.in);
