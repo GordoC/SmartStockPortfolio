@@ -236,7 +236,7 @@ public class PortfolioApp {
     // MODIFIES: this
     // EFFECTS: sets the current price of the stock to an amount
     private void doSetPrice(Stock stock) {
-        System.out.println("What is the current price of the stock?");
+        System.out.println("What is the current price of the stock? (in CAD)");
         double currentPrice = tryDouble();
         stock.setCurrentPriceCAD(currentPrice);
         System.out.println("Done...");
