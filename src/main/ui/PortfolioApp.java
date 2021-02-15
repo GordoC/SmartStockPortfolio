@@ -140,7 +140,11 @@ public class PortfolioApp {
 
     // EFFECTS: prints portfolio to the screen
     private void printPortfolio() {
-        System.out.println(portfolio);
+        if (portfolio.length() == 0) {
+            System.out.println("It seems that you don't have any stocks in your portfolio. Try adding one first.");
+        } else {
+            System.out.println(portfolio);
+        }
     }
 
     // EFFECTS: prints total profit/loss of portfolio to the screen
@@ -156,7 +160,7 @@ public class PortfolioApp {
     // MODIFIES: this
     // EFFECTS: displays commands and allows for the input to be processed
     private void doStockCommand(Stock stock) {
-        System.out.println("\nWhat would you like to edit?");
+        System.out.println("\nWhat would you like to edit on " + stock.getName() + "?");
         System.out.println("\ta -> Add volume");
         System.out.println("\ts -> Subtract volume");
         System.out.println("\tv -> View the stock");
@@ -202,11 +206,11 @@ public class PortfolioApp {
         double volume = tryDouble();
         if (volume < 0) {
             System.out.println("Sorry, your input is invalid. The number is negative. Try again please.");
-            doStockCommand(stock);
         } else {
             stock.addVolume(volume);
             System.out.println("Done...");
         }
+        doStockCommand(stock);
     }
 
     // MODIFIES: this
@@ -216,16 +220,17 @@ public class PortfolioApp {
         double volume = tryDouble();
         if (volume > stock.getVolume()) {
             System.out.println("Sorry, your input is invalid. The number is too great. Try again please.");
-            doStockCommand(stock);
         } else {
             stock.subtractVolume(volume);
             System.out.println("Done...");
         }
+        doStockCommand(stock);
     }
 
     // EFFECTS: prints stock to the screen
     private void doPrintStock(Stock stock) {
         System.out.println(stock);
+        doStockCommand(stock);
     }
 
     // MODIFIES: this
@@ -235,6 +240,7 @@ public class PortfolioApp {
         double currentPrice = tryDouble();
         stock.setCurrentPriceCAD(currentPrice);
         System.out.println("Done...");
+        doStockCommand(stock);
     }
 
     // EFFECTS: Try and catch to see if input is valid, if valid, returns input, otherwise try again
@@ -245,7 +251,7 @@ public class PortfolioApp {
             return value;
         } catch (Exception e) {
             System.out.println("Error! You inputted something other than a number! Try again please.");
-            String throwAway = input.next(); // Just so that the useless input would not feed into a useful input
+            String throwAway = input.next(); // So the useless input would not feed into the next useful input
         }
         return tryDouble();
     }
