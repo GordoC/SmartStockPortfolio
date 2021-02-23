@@ -92,7 +92,8 @@ public class PortfolioApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: deletes a stock from portfolio
+    // EFFECTS: deletes a stock from portfolio,
+    //          if there is no such stock, prompts to try again or not
     private void doDeleteStock() {
         System.out.println("What is the name of the stock you wish to delete?");
         String name = input.next();
@@ -116,7 +117,8 @@ public class PortfolioApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: conducts an edit to a stock in portfolio
+    // EFFECTS: conducts an edit to a stock in portfolio,
+    //          if there is no such stock, prompts to try again or not
     private void doEditStock() {
         System.out.println("What is the name of the stock you wish to edit?");
         String name = input.next();
@@ -158,7 +160,8 @@ public class PortfolioApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: displays commands and allows for the input to be processed
+    // EFFECTS: displays commands and allows for the input to be processed to edit an
+    //          individual stock
     private void doStockCommand(Stock stock) {
         System.out.println("\nWhat would you like to edit on " + stock.getName() + "?");
         System.out.println("\ta -> Add volume");
@@ -172,7 +175,7 @@ public class PortfolioApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: processes users command for individual stock
+    // EFFECTS: processes user's edit command for individual stock
     private void processIndividualStockCommand(String command, Stock stock) {
         if (command.equals("a")) {
             doAddVolume(stock);
@@ -200,12 +203,14 @@ public class PortfolioApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: add volume to given stock
+    // EFFECTS: add volume to given stock,
+    //          if the input is valid, prompts to try again or not
     private void doAddVolume(Stock stock) {
         System.out.println("How much volume would you like to add to the stock?");
         double volume = tryDouble();
         if (volume < 0) {
             System.out.println("Sorry, your input is invalid. The number is negative. Try again please.");
+            doAddVolume(stock);
         } else {
             stock.addVolume(volume);
             System.out.println("Done...");
@@ -214,12 +219,14 @@ public class PortfolioApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: subtracts volume from given stock
+    // EFFECTS: subtracts volume from given stock,
+    //          if the input is valid, prompts to try again or not
     private void doSubtractVolume(Stock stock) {
         System.out.println("How much volume would you like to subtract from the stock?");
         double volume = tryDouble();
         if (volume > stock.getVolume()) {
             System.out.println("Sorry, your input is invalid. The number is too great. Try again please.");
+            doSubtractVolume(stock);
         } else {
             stock.subtractVolume(volume);
             System.out.println("Done...");
