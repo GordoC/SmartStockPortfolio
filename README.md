@@ -32,3 +32,4 @@ Features of the application that users can access includes:
 - As a user, when I select the quit option, I want to be reminded to save my to-do list to file
  and have the option to do so or not.
 - As a user, I want to be able to save my portfolio to a file
+- As a user, I want to be able to load my portfolio from a file 
