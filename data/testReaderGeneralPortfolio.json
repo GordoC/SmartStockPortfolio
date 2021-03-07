@@ -1,0 +1,12 @@
+{"stocks": [
+  {
+    "volume": 3.42,
+    "initialPrice": 1985,
+    "name": "ETH"
+  },
+  {
+    "volume": 564.78,
+    "initialPrice": 0.0542,
+    "name": "DOGE"
+  }
+]}

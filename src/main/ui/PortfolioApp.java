@@ -2,15 +2,28 @@ package ui;
 
 import model.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 // Smart Stock Portfolio Application
-// References: TellerApp
+// References: TellerApp, JsonSerializationDemo
 public class PortfolioApp {
+    private static final String JSON_STORE = "./data/portfolio.json";
     private Portfolio portfolio;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
-    public PortfolioApp() {
+    // EFFECTS: initializes portfolio
+    // Source: TellerApp, JsonSerializationDemo
+    public PortfolioApp() throws FileNotFoundException {
+        portfolio = new Portfolio();
+        input = new Scanner(System.in);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runPortfolio();
     }
 
@@ -21,15 +34,13 @@ public class PortfolioApp {
         boolean keepGoing = true;
         String command = null;
 
-        init();
-
         while (keepGoing) {
             displayMenu();
             command = input.next();
             command = command.toLowerCase();
 
             if (command.equals("q")) {
-                keepGoing = false;
+                keepGoing = saveOrNot();
             } else {
                 processCommand(command);
             }
@@ -52,6 +63,10 @@ public class PortfolioApp {
             printPortfolio();
         } else if (command.equals("p")) {
             printTotalProfit();
+        } else if (command.equals("s")) {
+            savePortfolio();
+        } else if (command.equals("l")) {
+            loadPortfolio();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -66,15 +81,26 @@ public class PortfolioApp {
         System.out.println("\te -> Edit a stock");
         System.out.println("\tv -> View the portfolio");
         System.out.println("\tp -> View the total profit/loss of the portfolio");
+        System.out.println("\ts -> Save portfolio to file");
+        System.out.println("\tl -> load portfolio from file");
         System.out.println("\tq -> To quit");
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes portfolio
-    // Source: TellerApp
-    private void init() {
-        portfolio = new Portfolio();
-        input = new Scanner(System.in);
+    // EFFECTS: reminds user if they would like to save the portfolio to file or not
+    private boolean saveOrNot() {
+        System.out.println("Would you like to save your portfolio to a file before quitting?");
+        System.out.println("\ty -> Yes");
+        System.out.println("\tn -> No");
+        String command = input.next();
+        if (command.equals("y")) {
+            savePortfolio();
+            return false;
+        } else if (command.equals("n")) {
+            System.out.println("Your portfolio was not saved...");
+            return false;
+        }
+        return false;
     }
 
     // MODIFIES: this
@@ -168,10 +194,35 @@ public class PortfolioApp {
         System.out.println("\ts -> Subtract volume");
         System.out.println("\tv -> View the stock");
         System.out.println("\tu -> Update the current price");
-        System.out.println("\tq -> To quit");
+        System.out.println("\tb -> To go back");
         String command = input.next();
         command = command.toLowerCase();
         processIndividualStockCommand(command, stock);
+    }
+
+    // EFFECTS: saves the portfolio to file
+    // Source: JsonSerializationDemo
+    private void savePortfolio() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(portfolio);
+            jsonWriter.close();
+            System.out.println("Saved the portfolio to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads the portfolio from file
+    // Source: JsonSerializationDemo
+    private void loadPortfolio() {
+        try {
+            portfolio = jsonReader.read();
+            System.out.println("Loaded the portfolio from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 
     // MODIFIES: this
@@ -185,7 +236,7 @@ public class PortfolioApp {
             doPrintStock(stock);
         } else if (command.equals("u")) {
             doSetPrice(stock);
-        } else if (command.equals("q")) {
+        } else if (command.equals("b")) {
             System.out.println("Okay...");
         } else {
             System.out.println("Selection not valid...");

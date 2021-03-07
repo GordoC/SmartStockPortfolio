@@ -1,8 +1,12 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // Represents a stock having a name, volume, initial price in CAD, current price in CAD,
 // and current profit generated
-public class Stock {
+// References: JsonSerializationDemo
+public class Stock implements Writable {
     private String name;
     private double volume;
     private double initialPriceCAD;
@@ -77,5 +81,16 @@ public class Stock {
             // properly formats if profit is negative
             return "[" + name + ": -$" + profitStr.substring(1) + ", " + volumeStr + "]";
         }
+    }
+
+    // EFFECTS: returns the fields in this stock as a JSON array
+    // Source: JsonSerializationDemo
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("volume", volume);
+        json.put("initialPrice", initialPriceCAD);
+        return json;
     }
 }

@@ -1,9 +1,15 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
+import java.util.Collections;
 import java.util.LinkedList;
 
 // Represents a portfolio that can hold multiple stocks
-public class Portfolio {
+// References: JsonSerializationDemo
+public class Portfolio implements Writable {
     private LinkedList<Stock> portfolio;
 
     // EFFECTS: an empty portfolio
@@ -43,6 +49,11 @@ public class Portfolio {
         return null;
     }
 
+    // EFFECTS: returns the stocks in portfolio
+    public LinkedList<Stock> getPortfolio() {
+        return portfolio;
+    }
+
     // EFFECTS: returns the number of stocks in portfolio
     public int length() {
         return portfolio.size();
@@ -56,5 +67,26 @@ public class Portfolio {
             str = str + stock.toString() + ", ";
         }
         return str.substring(0, str.length() - 2); // get rids of the ", " at the end
+    }
+
+    // EFFECTS: returns the fields in this portfolio as a JSON array
+    // Source: JsonSerializationDemo
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("stocks", stocksToJson());
+        return json;
+    }
+
+    // EFFECTS: returns stocks in this Portfolio as a JSON array
+    // Source: JsonSerializationDemo
+    private JSONArray stocksToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Stock s : portfolio) {
+            jsonArray.put(s.toJson());
+        }
+
+        return jsonArray;
     }
 }

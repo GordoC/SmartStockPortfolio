@@ -1,0 +1,12 @@
+{"stocks": [
+    {
+        "volume": 14,
+        "initialPrice": 158,
+        "name": "AAPL"
+    },
+    {
+        "volume": 9,
+        "initialPrice": 749,
+        "name": "TSLA"
+    }
+]}
