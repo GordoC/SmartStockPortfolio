@@ -23,6 +23,16 @@ public class Stock implements Writable {
         this.currentPriceCAD = initialPriceCAD;
     }
 
+    // REQUIRES: given volume, initialPriceCAD, currentPriceCAD is not negative. Also given name has a non-zero length
+    // EFFECTS: stock has given name, volume, the initial price of the stock in CAD,
+    // the current price of the stock in CAD. This constructor is meant for JSON stuff
+    public Stock(String name, double volume, double initialPriceCAD, double currentPriceCAD) {
+        this.name = name;
+        this.volume = volume;
+        this.initialPriceCAD = initialPriceCAD;
+        this.currentPriceCAD = currentPriceCAD;
+    }
+
     // EFFECTS: returns name
     public String getName() {
         return name;
@@ -91,6 +101,7 @@ public class Stock implements Writable {
         json.put("name", name);
         json.put("volume", volume);
         json.put("initialPrice", initialPriceCAD);
+        json.put("currentPrice", currentPriceCAD);
         return json;
     }
 }

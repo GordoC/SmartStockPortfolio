@@ -63,7 +63,8 @@ public class JsonReader {
         String name = jsonObject.getString("name");
         double volume = jsonObject.getDouble("volume");
         double initialPriceCAD = jsonObject.getDouble("initialPrice");
-        Stock stock = new Stock(name, volume, initialPriceCAD);
+        double currentPriceCAD = jsonObject.getDouble("currentPrice");
+        Stock stock = new Stock(name, volume, initialPriceCAD, currentPriceCAD);
         portfolio.addStock(stock);
     }
 }

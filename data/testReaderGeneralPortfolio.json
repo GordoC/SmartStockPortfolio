@@ -2,11 +2,13 @@
   {
     "volume": 3.42,
     "initialPrice": 1985,
-    "name": "ETH"
+    "name": "ETH",
+    "currentPrice": 1985
   },
   {
     "volume": 564.78,
     "initialPrice": 0.0542,
-    "name": "DOGE"
+    "name": "DOGE",
+    "currentPrice": 0.0645
   }
 ]}

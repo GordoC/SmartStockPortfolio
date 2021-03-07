@@ -47,7 +47,7 @@ public class JsonWriterTest extends JsonTest {
     void testWriterGeneralPortfolio() {
         try {
             Portfolio portfolio = new Portfolio();
-            portfolio.addStock(new Stock("AAPL", 14, 158));
+            portfolio.addStock(new Stock("AAPL", 14, 158, 132));
             portfolio.addStock(new Stock("TSLA", 9, 749));
             JsonWriter writer = new JsonWriter("./data/testWriterGeneralPortfolio.json");
             writer.open();
@@ -58,8 +58,8 @@ public class JsonWriterTest extends JsonTest {
             portfolio = reader.read();
             LinkedList<Stock> stocks = portfolio.getPortfolio();
             assertEquals(2, stocks.size());
-            checkStock("AAPL", 14, 158, stocks.get(0));
-            checkStock("TSLA", 9, 749, stocks.get(1));
+            checkStock("AAPL", 14, 158, 132, stocks.get(0));
+            checkStock("TSLA", 9, 749, 749, stocks.get(1));
 
         } catch (IOException e) {
             fail("Exception should not have been thrown");

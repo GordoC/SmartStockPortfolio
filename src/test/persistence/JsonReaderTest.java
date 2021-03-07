@@ -42,8 +42,8 @@ public class JsonReaderTest extends JsonTest {
             Portfolio portfolio = reader.read();
             LinkedList<Stock> stocks = portfolio.getPortfolio();
             assertEquals(2, stocks.size());
-            checkStock("ETH", 3.42, 1985, stocks.get(0));
-            checkStock("DOGE", 564.78, 0.0542, stocks.get(1));
+            checkStock("ETH", 3.42, 1985, 1985, stocks.get(0));
+            checkStock("DOGE", 564.78, 0.0542, 0.0645, stocks.get(1));
         } catch (IOException e) {
             fail("Couldn't read from file");
         }

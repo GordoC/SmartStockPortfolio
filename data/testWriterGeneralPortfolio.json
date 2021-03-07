@@ -2,11 +2,13 @@
     {
         "volume": 14,
         "initialPrice": 158,
-        "name": "AAPL"
+        "name": "AAPL",
+        "currentPrice": 132
     },
     {
         "volume": 9,
         "initialPrice": 749,
-        "name": "TSLA"
+        "name": "TSLA",
+        "currentPrice": 749
     }
 ]}

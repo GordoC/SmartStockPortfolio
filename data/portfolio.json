@@ -1,5 +1,14 @@
-{"stocks": [{
-    "volume": 5,
-    "initialPrice": 57,
-    "name": "NEO"
-}]}
+{"stocks": [
+    {
+        "volume": 9,
+        "initialPrice": 57,
+        "name": "NEO",
+        "currentPrice": 87
+    },
+    {
+        "volume": 4,
+        "initialPrice": 674,
+        "name": "TSLA",
+        "currentPrice": 786
+    }
+]}
