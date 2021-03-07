@@ -29,7 +29,7 @@ Features of the application that users can access includes:
 - As a user, I want to be able to see the profit/loss each stock in my portfolio is at
 - As a user, I want to be able to see the total profit/loss I am at in my portfolio
 - As a user, I want to be able to edit each stock in my portfolio manually
-- As a user, when I select the quit option, I want to be reminded to save my to-do list to file
+- As a user, when I select the quit option, I want to be reminded to save my portfolio to a file
  and have the option to do so or not.
 - As a user, I want to be able to save my portfolio to a file
 - As a user, I want to be able to load my portfolio from a file 
