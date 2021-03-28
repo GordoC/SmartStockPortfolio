@@ -1,14 +1,6 @@
-{"stocks": [
-    {
-        "volume": 9,
-        "initialPrice": 57,
-        "name": "NEO",
-        "currentPrice": 87
-    },
-    {
-        "volume": 4,
-        "initialPrice": 674,
-        "name": "TSLA",
-        "currentPrice": 786
-    }
-]}
+{"stocks": [{
+    "volume": 23,
+    "initialPrice": 654,
+    "name": "TSLA",
+    "currentPrice": 654
+}]}
