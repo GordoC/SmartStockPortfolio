@@ -13,8 +13,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioSystem;
+import java.io.File;
+
 // Smart Stock Portfolio Application (Graphical)
-// References: SimpleDrawingPlayer, IntersectionGUI
+// References: SimpleDrawingPlayer, IntersectionGUI, StackOverflow, SuaveSnippets
 public class PortfolioAppGraphics extends JFrame {
 
     public static final int WIDTH = 1000;
@@ -22,25 +27,32 @@ public class PortfolioAppGraphics extends JFrame {
 
     private static final String JSON_STORE = "./data/portfolio.json";
 
+    private static final String STOCK_IMAGE = "./data/stock.Default";
+    protected static final String BUTTON_SOUND = "./data/click.wav";
+
     private Portfolio portfolio;
+    private Stock stockToDelete;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private JPanel inputPanel;
     private JPanel stocksPanel;
     private JPanel textPanel;
     private JLabel textBox;
-    private JScrollPane sp;
+    private JFrame frameYesOrNo;
+    private JPanel panelYesOrNo;
 
     // EFFECTS: initializes portfolio graphically
     // Source: SimpleDrawingPlayer, IntersectionGUI
-    public PortfolioAppGraphics() {
-        super("My Portfolio");
-        try {
-            initializeFields();
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to run application: file not found");
+    public PortfolioAppGraphics(String name, String action) {
+        super(name);
+        if (action.equals("start")) {
+            try {
+                initializeFields();
+            } catch (FileNotFoundException e) {
+                System.out.println("Unable to run application: file not found");
+            }
+            initializeGraphics();
         }
-        initializeGraphics();
     }
 
     // MODIFIES: this
@@ -50,6 +62,12 @@ public class PortfolioAppGraphics extends JFrame {
         portfolio = new Portfolio();
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
+        inputPanel = new JPanel(new GridLayout(5, 1));
+        stocksPanel = new JPanel();
+        textPanel = new JPanel(new GridLayout(1, 1));
+        textBox = new JLabel("Messages here!");
+        frameYesOrNo = new JFrame();
+        panelYesOrNo = new JPanel();
     }
 
     // MODIFIES: this
@@ -61,12 +79,7 @@ public class PortfolioAppGraphics extends JFrame {
         inputButtons();
         getContentPane().add(inputPanel, "East");
         getContentPane().add(textPanel, "South");
-        sp = new JScrollPane(
-                stocksPanel,
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
-        );
-        getContentPane().add(sp);
+        getContentPane().add(stocksPanel);
         setLocationRelativeTo(null);
         pack();
         setVisible(true);
@@ -76,8 +89,6 @@ public class PortfolioAppGraphics extends JFrame {
     // EFFECTS: initializes buttons
     // Source: IntersectionGUI
     private void inputButtons() {
-        inputPanel = new JPanel(new GridLayout(5, 1));
-        stocksPanel = new JPanel(new GridLayout(10, 4));
         addButton();
         deleteButton();
         saveButton();
@@ -93,6 +104,7 @@ public class PortfolioAppGraphics extends JFrame {
         JButton addButton = new JButton("Add stock");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
                 String name = JOptionPane.showInputDialog(
                         inputPanel,
                         "What is the name of your stock? (Ticker symbol preferred)",
@@ -111,6 +123,12 @@ public class PortfolioAppGraphics extends JFrame {
     // EFFECTS: finds if inputted stock already exists
     private void stockExistAlready(Stock stockInput) {
         Boolean found = false;
+        if (stockInput.getName().equals("")) {
+            JOptionPane.showMessageDialog(
+                    inputPanel,
+                    "The stock you inputted has no name so it was not added."
+            );
+        }
         for (Stock stock : portfolio.getPortfolio()) {
             if (stock.getName().equals(stockInput.getName())) {
                 JOptionPane.showMessageDialog(
@@ -134,20 +152,20 @@ public class PortfolioAppGraphics extends JFrame {
         JButton deleteButton = new JButton("Delete stock");
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
                 String name = JOptionPane.showInputDialog(
                         inputPanel,
                         "What is the name of the stock you wish to delete?",
                         null
                 );
-                Stock stock = portfolio.findStock(name);
-                if (stock == null) {
+                stockToDelete = portfolio.findStock(name);
+                if (stockToDelete == null) {
                     JOptionPane.showMessageDialog(
                             inputPanel,
                             "That stock doesn't exist"
                     );
                 } else {
-                    portfolio.deleteStock(stock);
-                    updateStocksPanel();
+                    yesOrNo("Are you sure you want to delete " + stockToDelete.getName() + "?", "delete");
                     textBox.setText("The stock has been deleted from the portfolio.");
                 }
             }
@@ -162,6 +180,7 @@ public class PortfolioAppGraphics extends JFrame {
         JButton saveButton = new JButton("Save portfolio");
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
                 save();
             }
         });
@@ -175,6 +194,7 @@ public class PortfolioAppGraphics extends JFrame {
         JButton loadButton = new JButton("Load portfolio");
         loadButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
                 try {
                     portfolio = jsonReader.read();
                     updateStocksPanel();
@@ -194,14 +214,8 @@ public class PortfolioAppGraphics extends JFrame {
         JButton quitButton = new JButton("Quit");
         quitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String answer = JOptionPane.showInputDialog(
-                        inputPanel,
-                        "Would you like to save your portfolio to a file before quitting?\ny -> Yes\nn -> No",
-                        null
-                );
-                if (answer.equals("y")) {
-                    save();
-                }
+                playSound(BUTTON_SOUND);
+                yesOrNo("Would you like to save your portfolio to a file before quitting?", "save");
                 setVisible(false);
                 dispose();
             }
@@ -212,8 +226,6 @@ public class PortfolioAppGraphics extends JFrame {
     // MODIFIES: this
     // EFFECTS: creates the text box
     private void textInputBox() {
-        textPanel = new JPanel(new GridLayout(1, 1));
-        textBox = new JLabel("Messages here!");
         textPanel.add(textBox);
     }
 
@@ -221,16 +233,22 @@ public class PortfolioAppGraphics extends JFrame {
     // EFFECTS: creates the individual stock button
     private void createStockButton(Stock stock) {
         JButton stockBox = new JButton(stock.getName());
+        ImageIcon icon = new ImageIcon(STOCK_IMAGE);
+        Image img = icon.getImage().getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
+        stockBox.setIcon(new ImageIcon(img));
         stockBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                StockEditGraphics stockGraphics = new StockEditGraphics(stock);
+                playSound(BUTTON_SOUND);
+                new StockEditGraphics(stock);
             }
         });
         stocksPanel.add(stockBox);
+        stocksPanel.validate();
+        stocksPanel.repaint();
     }
 
     // EFFECTS: Try and catch to see if input is valid double, if valid, returns input, otherwise try again
-    private double tryDouble(String msg) {
+    protected double tryDouble(String msg) {
         try {
             String value = JOptionPane.showInputDialog(inputPanel, msg, null);
             return Double.parseDouble(value);
@@ -261,6 +279,66 @@ public class PortfolioAppGraphics extends JFrame {
         stocksPanel.repaint();
         for (Stock stock : portfolio.getPortfolio()) {
             createStockButton(stock);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Asks user if they would like to save the portfolio or not
+    private void yesOrNo(String msg, String function) {
+        frameYesOrNo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JButton yesButton = new JButton("Yes");
+        yesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
+                callFunction(function);
+                disappearYesOrNo();
+            }
+        });
+        JButton noButton = new JButton("No");
+        noButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
+                disappearYesOrNo();
+            }
+        });
+        JLabel text = new JLabel(msg);
+        frameYesOrNo.getContentPane().add(text, "North");
+        panelYesOrNo.add(yesButton, "West");
+        panelYesOrNo.add(noButton, "East");
+        frameYesOrNo.getContentPane().add(panelYesOrNo, "South");
+        frameYesOrNo.pack();
+        frameYesOrNo.setVisible(true);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: makes frameYesOrNo disappear
+    private void disappearYesOrNo() {
+        frameYesOrNo.setVisible(false);
+        frameYesOrNo.dispose();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: depending on the inputted string, will call the appropriate function
+    private void callFunction(String fn) {
+        if (fn.equals("save")) {
+            save();
+        } else if (fn.equals("delete")) {
+            portfolio.deleteStock(stockToDelete);
+            updateStocksPanel();
+        }
+    }
+
+    // EFFECTS: plays the audio clip with name inputted, will catch exception if audio name doesn't exists
+    // Source: SuaveSnippets
+    protected void playSound(String soundName) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
         }
     }
 }

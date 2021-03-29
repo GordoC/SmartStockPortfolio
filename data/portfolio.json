@@ -1,6 +1,6 @@
 {"stocks": [{
-    "volume": 23,
-    "initialPrice": 654,
+    "volume": 101,
+    "initialPrice": 1,
     "name": "TSLA",
-    "currentPrice": 654
+    "currentPrice": 1
 }]}

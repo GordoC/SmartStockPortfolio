@@ -8,13 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 // Individual Stock (Graphical)
-// References: SimpleDrawingPlayer, IntersectionGUI
-public class StockEditGraphics extends JFrame {
+// References: SimpleDrawingPlayer, IntersectionGUI, StackOverflow
+public class StockEditGraphics extends PortfolioAppGraphics {
 
     public static final int WIDTH = 600;
     public static final int HEIGHT = 400;
 
-    private int fontSize = 25;
+    private static final int FONT_SIZE = 25;
 
     private Stock stock;
     private JPanel inputPanel;
@@ -27,7 +27,7 @@ public class StockEditGraphics extends JFrame {
 
     // EFFECTS: initializes stock graphically
     public StockEditGraphics(Stock stock) {
-        super(stock.getName());
+        super(stock.getName(), "");
         this.stock = stock;
         initializeGraphics();
     }
@@ -68,9 +68,9 @@ public class StockEditGraphics extends JFrame {
         volume = new JLabel("      Volume: " + (stock.getVolume()));
         profit = new JLabel("      Profit: $" + (stock.getProfit()));
         initPrice = new JLabel("      Initial price: $" + (stock.getInitialPriceCAD()));
-        volume.setFont(new Font(volume.getName(), Font.PLAIN, fontSize));
-        profit.setFont(new Font(profit.getName(), Font.PLAIN, fontSize));
-        initPrice.setFont(new Font(initPrice.getName(), Font.PLAIN, fontSize));
+        volume.setFont(new Font(volume.getName(), Font.PLAIN, FONT_SIZE));
+        profit.setFont(new Font(profit.getName(), Font.PLAIN, FONT_SIZE));
+        initPrice.setFont(new Font(initPrice.getName(), Font.PLAIN, FONT_SIZE));
         visualPanel.add(volume);
         visualPanel.add(profit);
         visualPanel.add(initPrice);
@@ -82,9 +82,11 @@ public class StockEditGraphics extends JFrame {
         JButton addButton = new JButton("Add volume");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
                 double addVolume = tryDouble("How much volume would you like to add to the stock?");
                 stock.addVolume(addVolume);
                 volume.setText("      Volume: " + stock.getVolume());
+                profit.setText("      Profit: " + formatMoney(stock.getProfit()));
                 textBox.setText("Added the new volume.");
             }
         });
@@ -97,9 +99,11 @@ public class StockEditGraphics extends JFrame {
         JButton addButton = new JButton("Subtract volume");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
                 double subVolume = tryDouble("How much volume would you like to subtract from the stock?");
                 stock.subtractVolume(subVolume);
                 volume.setText("      Volume: " + (stock.getVolume()));
+                profit.setText("      Profit: " + formatMoney(stock.getProfit()));
                 textBox.setText("Subtracted volume.");
             }
         });
@@ -112,6 +116,7 @@ public class StockEditGraphics extends JFrame {
         JButton addButton = new JButton("Update current price");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
                 double curPrice = tryDouble("What is the current price of the stock? (in CAD)");
                 stock.setCurrentPriceCAD(curPrice);
                 profit.setText("      Profit: " + formatMoney(stock.getProfit()));
@@ -126,6 +131,7 @@ public class StockEditGraphics extends JFrame {
         JButton addButton = new JButton("Go back");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
                 setVisible(false);
                 dispose();
             }
@@ -150,19 +156,5 @@ public class StockEditGraphics extends JFrame {
             // properly formats if profit is negative
             return "-$" + profitStr.substring(1);
         }
-    }
-
-    // EFFECTS: Try and catch to see if input is valid double, if valid, returns input, otherwise try again
-    private double tryDouble(String msg) {
-        try {
-            String value = JOptionPane.showInputDialog(inputPanel, msg, null);
-            return Double.parseDouble(value);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(
-                    inputPanel,
-                    "What you inputted was not a number, try again."
-            );
-        }
-        return tryDouble(msg);
     }
 }
