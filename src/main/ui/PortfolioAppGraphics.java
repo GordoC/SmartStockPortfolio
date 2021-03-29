@@ -40,6 +40,7 @@ public class PortfolioAppGraphics extends JFrame {
     private JLabel textBox;
     private JFrame frameYesOrNo;
     private JPanel panelYesOrNo;
+    private JLabel text;
 
     // EFFECTS: initializes portfolio graphically
     // Source: SimpleDrawingPlayer, IntersectionGUI
@@ -68,6 +69,7 @@ public class PortfolioAppGraphics extends JFrame {
         textBox = new JLabel("Messages here!");
         frameYesOrNo = new JFrame();
         panelYesOrNo = new JPanel();
+        text = new JLabel("");
     }
 
     // MODIFIES: this
@@ -122,23 +124,24 @@ public class PortfolioAppGraphics extends JFrame {
     // MODIFIES: this
     // EFFECTS: finds if inputted stock already exists
     private void stockExistAlready(Stock stockInput) {
-        Boolean found = false;
-        if (stockInput.getName().equals("")) {
-            JOptionPane.showMessageDialog(
-                    inputPanel,
-                    "The stock you inputted has no name so it was not added."
-            );
-        }
+        Boolean badName = false;
         for (Stock stock : portfolio.getPortfolio()) {
             if (stock.getName().equals(stockInput.getName())) {
                 JOptionPane.showMessageDialog(
                         inputPanel,
                         "The stock you inputted is already in the portfolio so it was not added."
                 );
-                found = true;
+                badName = true;
             }
         }
-        if (!found) {
+        if (stockInput.getName().equals("")) {
+            JOptionPane.showMessageDialog(
+                    inputPanel,
+                    "The stock you inputted has no name so it was not added."
+            );
+            badName = true;
+        }
+        if (!badName) {
             portfolio.addStock(stockInput);
             createStockButton(stockInput);
             textBox.setText("Thank you, your stock has been added.");
@@ -287,6 +290,7 @@ public class PortfolioAppGraphics extends JFrame {
     private void yesOrNo(String msg, String function) {
         frameYesOrNo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JButton yesButton = new JButton("Yes");
+        JButton noButton = new JButton("No");
         yesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 playSound(BUTTON_SOUND);
@@ -294,18 +298,14 @@ public class PortfolioAppGraphics extends JFrame {
                 disappearYesOrNo();
             }
         });
-        JButton noButton = new JButton("No");
         noButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 playSound(BUTTON_SOUND);
                 disappearYesOrNo();
             }
         });
-        JLabel text = new JLabel(msg);
-        frameYesOrNo.getContentPane().add(text, "North");
-        panelYesOrNo.add(yesButton, "West");
-        panelYesOrNo.add(noButton, "East");
-        frameYesOrNo.getContentPane().add(panelYesOrNo, "South");
+        text.setText(msg);
+        addToYesOrNo(yesButton, noButton);
         frameYesOrNo.pack();
         frameYesOrNo.setVisible(true);
     }
@@ -315,6 +315,16 @@ public class PortfolioAppGraphics extends JFrame {
     private void disappearYesOrNo() {
         frameYesOrNo.setVisible(false);
         frameYesOrNo.dispose();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds components in yes or no popup
+    private void addToYesOrNo(JButton yes, JButton no) {
+        panelYesOrNo.removeAll();
+        frameYesOrNo.getContentPane().add(text, "North");
+        panelYesOrNo.add(yes, "West");
+        panelYesOrNo.add(no, "East");
+        frameYesOrNo.getContentPane().add(panelYesOrNo, "South");
     }
 
     // MODIFIES: this

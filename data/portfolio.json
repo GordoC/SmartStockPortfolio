@@ -1,6 +1,14 @@
-{"stocks": [{
-    "volume": 101,
-    "initialPrice": 1,
-    "name": "TSLA",
-    "currentPrice": 1
-}]}
+{"stocks": [
+    {
+        "volume": 28,
+        "initialPrice": 654,
+        "name": "TSLA",
+        "currentPrice": 12
+    },
+    {
+        "volume": 124315,
+        "initialPrice": 0.134513,
+        "name": "DOGE",
+        "currentPrice": 1
+    }
+]}
