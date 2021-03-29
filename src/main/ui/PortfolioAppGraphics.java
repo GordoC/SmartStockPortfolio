@@ -36,6 +36,7 @@ public class PortfolioAppGraphics extends JFrame {
     private JsonReader jsonReader;
     private JPanel inputPanel;
     private JPanel stocksPanel;
+    private JPanel stockPanel;
     private JPanel textPanel;
     private JLabel textBox;
     private JFrame frameYesOrNo;
@@ -107,14 +108,7 @@ public class PortfolioAppGraphics extends JFrame {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 playSound(BUTTON_SOUND);
-                String name = JOptionPane.showInputDialog(
-                        inputPanel,
-                        "What is the name of your stock? (Ticker symbol preferred)",
-                        null
-                );
-                double volume = tryDouble("How much volume did you buy of the stock?");
-                double initPrice = tryDouble("What was the price of the stock at the time of purchase? (in CAD)");
-                Stock stock = new Stock(name, volume, initPrice);
+                Stock stock = addInputs();
                 stockExistAlready(stock);
             }
         });
@@ -122,29 +116,58 @@ public class PortfolioAppGraphics extends JFrame {
     }
 
     // MODIFIES: this
+    // EFFECTS: runs the add stock feature pop up and returns the stock created
+    // Source: StackOverflow
+    private Stock addInputs() {
+        stockPanel = new JPanel();
+        JTextField name = new JTextField(10);
+        JTextField volume = new JTextField(10);
+        JTextField initPrice = new JTextField(10);
+        stockPanel.add(new JLabel("Name (Ticker symbol): "));
+        stockPanel.add(name);
+        stockPanel.add(new JLabel("Volume: "));
+        stockPanel.add(volume);
+        stockPanel.add(new JLabel("Initial price: "));
+        stockPanel.add(initPrice);
+
+        int result = JOptionPane.showConfirmDialog(null, stockPanel,
+                "Please enter each required field for your stock.", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            playSound(BUTTON_SOUND);
+            try {
+                return new Stock(name.getText(), Double.parseDouble(volume.getText()),
+                        Double.parseDouble(initPrice.getText()));
+            } catch (Exception e) {
+                // inputted bad values for fields
+            }
+        }
+        return null;
+    }
+
+    // MODIFIES: this
     // EFFECTS: finds if inputted stock already exists
     private void stockExistAlready(Stock stockInput) {
         Boolean badName = false;
-        for (Stock stock : portfolio.getPortfolio()) {
-            if (stock.getName().equals(stockInput.getName())) {
-                JOptionPane.showMessageDialog(
-                        inputPanel,
-                        "The stock you inputted is already in the portfolio so it was not added."
-                );
-                badName = true;
+        if (stockInput != null) {
+            for (Stock stock : portfolio.getPortfolio()) {
+                if (stock.getName().equals(stockInput.getName()) || stockInput.getName().equals("")) {
+                    JOptionPane.showMessageDialog(
+                            inputPanel,
+                            "The stock you inputted is already in the portfolio so it was not added."
+                    );
+                    badName = true;
+                }
             }
-        }
-        if (stockInput.getName().equals("")) {
+            if (!badName) {
+                portfolio.addStock(stockInput);
+                createStockButton(stockInput);
+                textBox.setText("Thank you, your stock has been added.");
+            }
+        } else {
             JOptionPane.showMessageDialog(
                     inputPanel,
-                    "The stock you inputted has no name so it was not added."
+                    "You entered a value that cannot be processed so the stock was no added."
             );
-            badName = true;
-        }
-        if (!badName) {
-            portfolio.addStock(stockInput);
-            createStockButton(stockInput);
-            textBox.setText("Thank you, your stock has been added.");
         }
     }
 
