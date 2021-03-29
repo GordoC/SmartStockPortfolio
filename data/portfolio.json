@@ -1,6 +1,1 @@
-{"stocks": [{
-    "volume": 15,
-    "initialPrice": 124,
-    "name": "TSLA",
-    "currentPrice": 123
-}]}
+{"stocks": []}

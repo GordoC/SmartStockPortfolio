@@ -98,6 +98,7 @@ public class PortfolioAppGraphics extends JFrame {
         loadButton();
         quitButton();
         textInputBox();
+        totalProfitButton();
     }
 
     // MODIFIES: this
@@ -166,7 +167,7 @@ public class PortfolioAppGraphics extends JFrame {
         } else {
             JOptionPane.showMessageDialog(
                     inputPanel,
-                    "You entered a value that cannot be processed so the stock was no added."
+                    "You entered a value that cannot be processed so the stock was not added."
             );
         }
     }
@@ -250,6 +251,23 @@ public class PortfolioAppGraphics extends JFrame {
     }
 
     // MODIFIES: this
+    // EFFECTS: creates the total profit button
+    private void totalProfitButton() {
+        JButton totalButton = new JButton("Total profit");
+        totalButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                playSound(BUTTON_SOUND);
+                textBox.setText("Total profits loaded.");
+                JOptionPane.showMessageDialog(
+                        inputPanel,
+                        "Total profit of your portfolio: " + formatMoney(portfolio.totalProfit())
+                );
+            }
+        });
+        textPanel.add(totalButton);
+    }
+
+    // MODIFIES: this
     // EFFECTS: creates the text box
     private void textInputBox() {
         textPanel.add(textBox);
@@ -265,6 +283,7 @@ public class PortfolioAppGraphics extends JFrame {
         stockBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 playSound(BUTTON_SOUND);
+                textBox.setText("Opened contents of " + stock.getName());
                 new StockEditGraphics(stock);
             }
         });
@@ -299,6 +318,7 @@ public class PortfolioAppGraphics extends JFrame {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: updates the stocks panel
     private void updateStocksPanel() {
         stocksPanel.removeAll();
@@ -372,6 +392,17 @@ public class PortfolioAppGraphics extends JFrame {
         } catch (Exception ex) {
             System.out.println("Error with playing sound.");
             ex.printStackTrace();
+        }
+    }
+
+    // EFFECTS: properly formats money to string
+    protected String formatMoney(double money) {
+        String profitStr = String.format("%.2f", money); // get profit to 2 decimal places as a string
+        if (money >= 0) {
+            return "$" + profitStr;
+        } else {
+            // properly formats if profit is negative
+            return "-$" + profitStr.substring(1);
         }
     }
 }

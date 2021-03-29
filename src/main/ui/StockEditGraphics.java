@@ -146,15 +146,4 @@ public class StockEditGraphics extends PortfolioAppGraphics {
         textBox = new JLabel("Messages here!");
         textPanel.add(textBox);
     }
-
-    // EFFECTS: properly formats money to string
-    private String formatMoney(double money) {
-        String profitStr = String.format("%.2f", money); // get profit to 2 decimal places as a string
-        if (money >= 0) {
-            return "$" + profitStr;
-        } else {
-            // properly formats if profit is negative
-            return "-$" + profitStr.substring(1);
-        }
-    }
 }
