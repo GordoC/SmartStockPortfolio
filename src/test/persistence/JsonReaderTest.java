@@ -49,14 +49,17 @@ public class JsonReaderTest extends JsonTest {
         }
     }
 
+    // Won't ever receive a bad JSON stock unless manually put
     @Test
     public void testReaderBadPortfolio() {
         JsonReader reader = new JsonReader("./data/testReaderBadPortfolio.json");
         try {
             Portfolio portfolio = reader.read();
+            // Will get "Bad input" from System.out.print
             LinkedList<Stock> stocks = portfolio.getPortfolio();
+            // Supposed to have added two stocks but one failed so it was not added (good thing)
             assertEquals(1, stocks.size());
-            checkStock("ETH", 3.42, 1985, 1985, stocks.get(0));
+            checkStock("CLR", 144.23, 0.064, 0.077, stocks.get(0));
         } catch (IOException e) {
             fail("Couldn't read from file");
         }

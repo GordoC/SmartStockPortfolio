@@ -1,9 +1,9 @@
 {"stocks": [
   {
-    "volume": 3.42,
-    "initialPrice": 1985,
-    "name": "ETH",
-    "currentPrice": 1985
+    "volume": 144.23,
+    "initialPrice": 0.064,
+    "name": "CLR",
+    "currentPrice": 0.077
   },
   {
     "volume": 564.78,
