@@ -46,11 +46,18 @@ The classes that have a robust design are:
 
 I like the design of my UML class diagram, although it was tough
 to make the arrows attaching each class look clear and not overlap each other
-too much.
+too much. I find that there was a good balance of coupling and cohesion in my design.
 
 If I had more time to work on the project, I would probably
 refactor:
 - How there is an association between PortfolioAppGraphics and Stock,
 I don't think there needs to be one but it seemed complex to fix
 
-Other than that, I think my UML class diagram is good
+- My graphic classes. I believe there's bad coupling and/or cohesion in there
+somewhere with the J stuff (JFrame, Jlabel, etc) but I'm not too experienced 
+right now to refactor them.
+
+- Add more helper methods because some methods might be doing more than one
+task
+
+Other than that, I think my UML class diagram and code is good
