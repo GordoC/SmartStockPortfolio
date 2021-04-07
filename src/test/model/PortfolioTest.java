@@ -4,8 +4,7 @@ import model.exceptions.DuplicateStockException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.sun.tools.internal.ws.wsdl.parser.Util.fail;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PortfolioTest {
     private Portfolio portfolio;
