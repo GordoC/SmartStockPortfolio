@@ -48,4 +48,17 @@ public class JsonReaderTest extends JsonTest {
             fail("Couldn't read from file");
         }
     }
+
+    @Test
+    public void testReaderBadPortfolio() {
+        JsonReader reader = new JsonReader("./data/testReaderBadPortfolio.json");
+        try {
+            Portfolio portfolio = reader.read();
+            LinkedList<Stock> stocks = portfolio.getPortfolio();
+            assertEquals(1, stocks.size());
+            checkStock("ETH", 3.42, 1985, 1985, stocks.get(0));
+        } catch (IOException e) {
+            fail("Couldn't read from file");
+        }
+    }
 }
