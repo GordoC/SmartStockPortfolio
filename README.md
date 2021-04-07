@@ -33,3 +33,24 @@ Features of the application that users can access includes:
  and have the option to do so or not.
 - As a user, I want to be able to save my portfolio to a file
 - As a user, I want to be able to load my portfolio from a file 
+
+#### Phase 4: Task 2
+
+I chose the first option, which is testing and designing a class that is robust.
+The classes that have a robust design are:
+- Portfolio, the method is 'addStock' 
+
+- Stock, the two constructors and the two methods, 'addVolume', and 'subtractVolume'
+
+#### Phase 4: Task 3
+
+I like the design of my UML class diagram, although it was tough
+to make the arrows attaching each class look clear and not overlap each other
+too much.
+
+If I had more time to work on the project, I would probably
+refactor:
+- How there is an association between PortfolioAppGraphics and Stock,
+I don't think there needs to be one but it seemed complex to fix
+
+Other than that, I think my UML class diagram is good

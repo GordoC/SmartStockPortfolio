@@ -1,5 +1,8 @@
 package model;
 
+import model.exceptions.IllegalNameException;
+import model.exceptions.IllegalPriceException;
+import model.exceptions.IllegalVolumeException;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -13,20 +16,40 @@ public class Stock implements Writable {
     private double currentPriceCAD;
     private double profit;
 
-    // REQUIRES: given volume and initialPriceCAD is not negative. Also given name has a non-zero length
     // EFFECTS: stock has given name, volume, and the initial price of the stock in CAD.
-    // Also sets current price of the stock to the initial price of the stock in CAD
-    public Stock(String name, double volume, double initialPriceCAD) {
+    // Also sets current price of the stock to the initial price of the stock in CAD.
+    // Throws appropriate exception if there is an illegal input.
+    public Stock(String name, double volume, double initialPriceCAD) throws IllegalVolumeException,
+            IllegalPriceException, IllegalNameException {
+        if (name.length() == 0) {
+            throw new IllegalNameException();
+        }
+        if (volume < 0) {
+            throw new IllegalVolumeException();
+        }
+        if (initialPriceCAD < 0) {
+            throw new IllegalPriceException();
+        }
         this.name = name;
         this.volume = volume;
         this.initialPriceCAD = initialPriceCAD;
         this.currentPriceCAD = initialPriceCAD;
     }
 
-    // REQUIRES: given volume, initialPriceCAD, currentPriceCAD is not negative. Also given name has a non-zero length
     // EFFECTS: stock has given name, volume, the initial price of the stock in CAD,
-    // the current price of the stock in CAD. This constructor is meant for JSON stuff
-    public Stock(String name, double volume, double initialPriceCAD, double currentPriceCAD) {
+    // the current price of the stock in CAD. Throws appropriate exception if there is an illegal input.
+    // This constructor is meant for JSON
+    public Stock(String name, double volume, double initialPriceCAD, double currentPriceCAD)
+            throws IllegalVolumeException, IllegalPriceException, IllegalNameException {
+        if (name.length() == 0) {
+            throw new IllegalNameException();
+        }
+        if (volume < 0) {
+            throw new IllegalVolumeException();
+        }
+        if (initialPriceCAD < 0 || currentPriceCAD < 0) {
+            throw new IllegalPriceException();
+        }
         this.name = name;
         this.volume = volume;
         this.initialPriceCAD = initialPriceCAD;
@@ -66,17 +89,24 @@ public class Stock implements Writable {
         this.currentPriceCAD = currentPriceCAD;
     }
 
-    // REQUIRES: given volume >= 0
     // MODIFIES: this
-    // EFFECTS: adds given amount of volume to the total volume
-    public void addVolume(double volume) {
-        this.volume += volume;
+    // EFFECTS: adds given amount of volume to the total volume if added volume is not a negative number,
+    // else will throw an IllegalVolumeException
+    public void addVolume(double volume) throws IllegalVolumeException {
+        if (volume < 0) {
+            throw new IllegalVolumeException();
+        } else {
+            this.volume += volume;
+        }
     }
 
-    // REQUIRES: given volume >= 0 and <= this.volume
     // MODIFIES: this
-    // EFFECTS: subtracts given amount of volume to the total volume
-    public void subtractVolume(double volume) {
+    // EFFECTS: subtracts given amount of volume to the total volume if given volume is not a negative number,
+    // or if the given volume is less than the current total volume, else will throw an IllegalVolumeException
+    public void subtractVolume(double volume) throws IllegalVolumeException {
+        if (volume < 0 || this.volume - volume < 0) {
+            throw new IllegalVolumeException();
+        }
         this.volume -= volume;
     }
 

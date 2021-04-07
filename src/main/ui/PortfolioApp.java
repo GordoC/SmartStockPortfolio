@@ -5,6 +5,8 @@ import model.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
+
+import model.exceptions.IllegalVolumeException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -112,9 +114,13 @@ public class PortfolioApp {
         double volume = tryDouble();
         System.out.println("What was the price of the stock at the time of purchase? (in CAD)");
         double initPrice = tryDouble();
-        Stock stock = new Stock(name, volume, initPrice);
-        portfolio.addStock(stock);
-        System.out.println("Thank you, your stock has been added.");
+        try {
+            Stock stock = new Stock(name, volume, initPrice);
+            portfolio.addStock(stock);
+            System.out.println("Thank you, your stock has been added.");
+        } catch (Exception e) {
+            System.out.println("Bad input");
+        }
     }
 
     // MODIFIES: this
@@ -263,7 +269,11 @@ public class PortfolioApp {
             System.out.println("Sorry, your input is invalid. The number is negative. Try again please.");
             doAddVolume(stock);
         } else {
-            stock.addVolume(volume);
+            try {
+                stock.addVolume(volume);
+            } catch (IllegalVolumeException ee) {
+                System.out.println("Bad input");
+            }
             System.out.println("Done...");
         }
         doStockCommand(stock);
@@ -279,7 +289,11 @@ public class PortfolioApp {
             System.out.println("Sorry, your input is invalid. The number is too great. Try again please.");
             doSubtractVolume(stock);
         } else {
-            stock.subtractVolume(volume);
+            try {
+                stock.subtractVolume(volume);
+            } catch (IllegalVolumeException ee) {
+                System.out.println("Bad input");
+            }
             System.out.println("Done...");
         }
         doStockCommand(stock);

@@ -1,6 +1,7 @@
 package ui;
 
 import model.*;
+import model.exceptions.IllegalVolumeException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,7 +85,12 @@ public class StockEditGraphics extends PortfolioAppGraphics {
             public void actionPerformed(ActionEvent e) {
                 playSound(BUTTON_SOUND);
                 double addVolume = tryDouble("How much volume would you like to add to the stock?");
-                stock.addVolume(addVolume);
+                try {
+                    stock.addVolume(addVolume);
+                } catch (IllegalVolumeException ee) {
+                    // Shouldn't be caught because of the tryDouble method
+                    System.out.println("Bad input");
+                }
                 volume.setText("      Volume: " + stock.getVolume());
                 profit.setText("      Profit: " + formatMoney(stock.getProfit()));
                 textBox.setText("Added the new volume.");
@@ -101,7 +107,12 @@ public class StockEditGraphics extends PortfolioAppGraphics {
             public void actionPerformed(ActionEvent e) {
                 playSound(BUTTON_SOUND);
                 double subVolume = tryDouble("How much volume would you like to subtract from the stock?");
-                stock.subtractVolume(subVolume);
+                try {
+                    stock.subtractVolume(subVolume);
+                } catch (IllegalVolumeException ee) {
+                    // Shouldn't be caught because of the tryDouble method
+                    System.out.println("Bad input");
+                }
                 volume.setText("      Volume: " + (stock.getVolume()));
                 profit.setText("      Profit: " + formatMoney(stock.getProfit()));
                 textBox.setText("Subtracted volume.");

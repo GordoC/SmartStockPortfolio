@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.DuplicateStockException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -17,10 +18,15 @@ public class Portfolio implements Writable {
         portfolio = new LinkedList<>();
     }
 
-    // REQUIRES: stock.getName() must be unique compared to other stock in portfolio
     // MODIFIES: this
-    // EFFECTS: add given stock to portfolio
-    public void addStock(Stock stock) {
+    // EFFECTS: add given stock to portfolio if the given stock's name is not the same to any other stock
+    // in the portfolio already, else will throw a DuplicateStockException
+    public void addStock(Stock stock) throws DuplicateStockException {
+        for (Stock s : portfolio) {
+            if (s.getName().equals(stock.getName())) {
+                throw new DuplicateStockException();
+            }
+        }
         portfolio.add(stock);
     }
 

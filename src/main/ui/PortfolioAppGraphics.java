@@ -5,6 +5,7 @@ import model.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import model.exceptions.DuplicateStockException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -148,21 +149,16 @@ public class PortfolioAppGraphics extends JFrame {
     // MODIFIES: this
     // EFFECTS: finds if inputted stock already exists
     private void stockExistAlready(Stock stockInput) {
-        Boolean badName = false;
         if (stockInput != null) {
-            for (Stock stock : portfolio.getPortfolio()) {
-                if (stock.getName().equals(stockInput.getName()) || stockInput.getName().equals("")) {
-                    JOptionPane.showMessageDialog(
-                            inputPanel,
-                            "The stock you inputted is already in the portfolio so it was not added."
-                    );
-                    badName = true;
-                }
-            }
-            if (!badName) {
+            try {
                 portfolio.addStock(stockInput);
                 createStockButton(stockInput);
                 textBox.setText("Thank you, your stock has been added.");
+            } catch (DuplicateStockException e) {
+                JOptionPane.showMessageDialog(
+                        inputPanel,
+                        "The stock you inputted is already in the portfolio so it was not added."
+                );
             }
         } else {
             JOptionPane.showMessageDialog(
